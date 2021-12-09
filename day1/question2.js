@@ -3,7 +3,7 @@ const fileInputHelper = require('../utils/inputReader')
 fileInputHelper.readNumberPerLine('input.txt', (lines) => {
     let measurementWindows = [];
 
-    for(var x=0, y=1, z=2; z < lines.length; x+=1, y+=1, z+=1) {
+    for(var x=0, y=1, z=2; z < lines.length; x++, y++, z++) {
         console.log(`Reading lines ${x}, ${y}, ${z}`)
 
         const totalMeasurement = lines[x] + lines[y] + lines[z];
