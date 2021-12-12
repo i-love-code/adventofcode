@@ -30,8 +30,22 @@ const readSplitLines = function (filename, callback) {
         terminal: false
     })
     .on('line', (line) => {
-        
         lines.push(line.trim().split(' ').map(x => x.trim()))
+    })
+    .on('close', function () {
+        callback(lines)
+    })
+}
+
+const readCommaDelimitedLines = function (filename, callback) {
+    let lines = [];
+
+    rl.createInterface({
+        input: fs.createReadStream(filename),
+        terminal: false
+    })
+    .on('line', (line) => {
+        lines.push(line.trim().split(',').map(x => x.trim()))
     })
     .on('close', function () {
         callback(lines)
@@ -56,5 +70,6 @@ const readLines = function (filename, callback) {
 module.exports = {
     readNumberPerLine,
     readSplitLines,
-    readLines
+    readLines,
+    readCommaDelimitedLines
 }
