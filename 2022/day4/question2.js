@@ -2,8 +2,8 @@ const fileInputHelper = require('../../utils/inputReader')
 
 fileInputHelper.readCommaDelimitedLines('realInput.txt', elfAssignmentPairs => {
 
-    const parsedElfAssignments = elfAssignmentPairs.map((elfAssignmentPair, pairIndex) => {
-        return elfAssignmentPair.map((elfAssignment, elfIndex) => {
+    const parsedElfAssignments = elfAssignmentPairs.map((elfAssignmentPair) => {
+        return elfAssignmentPair.map((elfAssignment) => {
             const startAndEndSections = elfAssignment.split('-').map(sectionString => parseInt(sectionString));
 
             let sections = []
@@ -17,7 +17,7 @@ fileInputHelper.readCommaDelimitedLines('realInput.txt', elfAssignmentPairs => {
 
     console.log(parsedElfAssignments)
 
-    const fullyOverlappedSectionAssignments = parsedElfAssignments.filter((elfSectionPairs, pairIndex) => {
+    const fullyOverlappedSectionAssignments = parsedElfAssignments.filter((elfSectionPairs) => {
         // For each pair of elves...
         return elfSectionPairs.filter(currentElfSections => {
             // Is it's section assignments fully covered in another pair (besides itself)?

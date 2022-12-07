@@ -85,6 +85,8 @@ const readLineArraysWithBlankSeparator = function (filename, callback) {
             }
         })
         .on('close', function () {
+            lines.push(currLines)
+
             callback(lines)
         })
 }
