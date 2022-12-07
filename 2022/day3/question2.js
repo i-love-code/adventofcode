@@ -1,6 +1,9 @@
 const fileInputHelper = require('../../utils/inputReader')
+const { evenlySplitString } = require('../../utils/arrayHelpers')
 
-const toPriority = (item) => {
+const NUM_ELVES = 3;
+
+const getItemPriority = (item) => {
     const unicodeValue = item.charCodeAt(0);
 
     // a unicode = 97
@@ -12,32 +15,24 @@ const toPriority = (item) => {
     return (unicodeValue - 38);
 }
 
-fileInputHelper.readLines('fakeInput.txt', (rucksacks) => {
-    const duplicateItemSets = rucksacks.map((rucksack, index) => {
-        const compartment1 = rucksack.slice(0, rucksack.length / 2);
-        const compartment2 = rucksack.slice(rucksack.length / 2, rucksack.length);
+fileInputHelper.readLines('realInput.txt', (rucksacks) => {
+    console.log(`Number of rucksacks:`, rucksacks.length)
 
-        const compartment1Array = compartment1.split('');
-        const compartment2Array = compartment2.split('');
+    let groupBadges = []
 
-        const intersection = compartment1Array.filter(item => compartment2Array.includes(item))
+    for (let i = 0; i < rucksacks.length; i += 3) {
+        const rucksackLabel = `Rucksack set {${i}..${i + 3}}`
+        const rucksackSet = rucksacks.slice(i, i + 3).map(sack => sack.split(''))
 
-        console.log(`Rucksack #${index}: ${rucksack} (${compartment1}|${compartment2}) -> intersection ${intersection}`)
+        const otherRucksacks = rucksackSet.slice(1, 3)
 
-        return intersection.filter((val, index, self) => self.indexOf(val) === index)
-    })
+        const itemInCommon = rucksackSet[0].filter(item => otherRucksacks.every(otherRucksack => otherRucksack.includes(item)))[0]
 
-    console.log(`Rucksack duplicate contents: `, duplicateItemSets)
+        groupBadges.push(itemInCommon)
+    }
 
-    const prioritiesOfDuplicateItems = duplicateItemSets.map((duplicateItems, index) => {
-        console.log(`Duplicate items #${index} -> ${duplicateItems}`)
+    const badgePrios = groupBadges.map(badgeItem => getItemPriority(badgeItem))
+    const totalPriority = badgePrios.reduce((total, val) => total + val, 0)
 
-        return toPriority(duplicateItems[0]);
-    })
-
-    console.log(`Priorities of duplicate items: ${prioritiesOfDuplicateItems}`)
-
-    const totalPriorities = prioritiesOfDuplicateItems.reduce((total, val) => total + val, 0);
-
-    console.log(`Sum of duplicated items:`, totalPriorities)
+    console.log(`Badges: ${groupBadges} have total priority: ${badgePrios.join('+')}=${totalPriority}`)
 })
